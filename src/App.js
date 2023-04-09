@@ -11,7 +11,7 @@ function App() {
   return (
     <>
       <div className={`main-box ${isDark ? "dark-mode" : ""}`}>
-        <h1>Good {isDark ? "Night" : "Morning"}</h1>
+        <h2>Good {isDark ? "Night" : "Morning"}</h2>
 
         <button onClick={() => { setIsDark(!isDark) }} className="toggle-btn">change to {!isDark ? "Dark" : "Light"}</button>
 
