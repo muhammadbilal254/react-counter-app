@@ -6,29 +6,49 @@ on:
     
 # to deploy changes on surge host
 
-
 jobs:
   build:
-    name: Deploy React on Surge
     runs-on: ubuntu-latest
+    name: Deploying to surge
     steps:
-      - uses: actions/checkout@v1
-      - name: Setup Nodejs
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v2-beta
         with:
           node-version: 12
-
-      - name: Prepare yarn on Ubuntu
-        run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/yarn.gpg
-
-      - name: Install Yarn
+      - name: Prepare for Yarn Installation
+        run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+      - name: install yarn
         run: sudo apt update && sudo apt install yarn
-        
-      - name: Generate Build
-        run: yarn run build
-
+      - name: Build React App
+        run: yarn build
       - name: Install Surge
-        run: npm install --global surge
+        run: npm install -g surge
+      - name: Run surge
+        run: surge ./build https://react-base-counter.surge.sh/ --token ${{ secrets.SURGE_TOKEN }}
+
+# jobs:
+#   build:
+#     name: Deploy React on Surge
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v1
+#       - name: Setup Nodejs
+#         uses: actions/setup-node@v1
+#         with:
+#           node-version: 12
+
+#       - name: Prepare yarn on Ubuntu
+#         run: curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/yarn.gpg
+
+#       - name: Install Yarn
+#         run: sudo apt update && sudo apt install yarn
         
-      - name: Deploy Surge
-        run: surge ./build/ https://react-base-counter.surge.sh/ ${{ secrets.SURGE_TOKEN }}
+#       - name: Generate Build
+#         run: yarn run build
+
+#       - name: Install Surge
+#         run: npm install --global surge
+        
+#       - name: Deploy Surge
+#         run: surge ./build/ https://react-base-counter.surge.sh/ ${{ secrets.SURGE_TOKEN }}
