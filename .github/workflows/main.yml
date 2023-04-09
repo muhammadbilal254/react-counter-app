@@ -1,0 +1,26 @@
+# when we push on master branch they apply changes on the real web
+on:
+  push:
+    branches:
+    - master
+    
+# to deploy changes on surge host
+
+
+jobs:
+  build:
+    name: Deploy React on Surge
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup Nodejs
+        uses: actions/setup-node@v1
+        
+      - name: Install Surge
+        run: npm install --global surge
+        
+      - name: Generate Build
+        run: npm run build
+        
+      - name: Deploy Surge
+        run: surge ./build/ https://react-base-counter.surge.sh/ ${{ secrets.SURGE_TOKEN }}
