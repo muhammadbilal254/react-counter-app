@@ -20,7 +20,7 @@ jobs:
         run: npm install --global surge
         
       - name: Generate Build
-        run: npm run build
+        run: npm build
         
       - name: Deploy Surge
         run: surge ./build/ https://react-base-counter.surge.sh/ ${{ secrets.SURGE_TOKEN }}
